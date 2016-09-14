@@ -209,7 +209,13 @@ void GLApplication::sectionSquare() {
 void GLApplication::sectionCircle() {
   _section.clear();
 
-
+  // Q5
+  int nbPoints = 30;
+  for(int i = 0; i <= nbPoints; i++) {
+    float x = cos(2 * i * M_PI / nbPoints);
+    float y = sin(2 * i * M_PI / nbPoints);
+    _section.push_back(Vector2(x,y));
+  }
 }
 
 
