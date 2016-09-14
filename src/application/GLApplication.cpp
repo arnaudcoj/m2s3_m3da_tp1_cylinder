@@ -359,8 +359,13 @@ void GLApplication::extrudeLine() {
   _extrusion.clear();
   _normalExtrusion.clear(); // for lighting (last question)
 
-
-
+  //Q6
+  //On récupère le x et y de la slice et le z de la stack, puis on ajoute les Vector3(x,y,z) dans extrusion
+  for(Vector3 stack : _path) {
+    for(Vector2 slice : _section) {
+      _extrusion.push_back(Vector3(slice.x(), slice.y(), stack.z()));
+    }
+  }
 
 }
 
