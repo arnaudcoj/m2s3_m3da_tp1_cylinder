@@ -224,9 +224,13 @@ void GLApplication::sectionCircle() {
 void GLApplication::pathDefault() {
 
   _path.clear();
-  _path.push_back(Vector3(0,0,-2));
-  _path.push_back(Vector3(0,0,2));
 
+  //_path.push_back(Vector3(0,0,-2));
+  //_path.push_back(Vector3(0,0,2));
+
+  //Q7
+  _path.push_back(Vector3(-2,0,-2));
+  _path.push_back(Vector3(2,0,2));
 
 }
 
