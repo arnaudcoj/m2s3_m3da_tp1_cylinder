@@ -8,6 +8,7 @@
 #include "Camera.h"
 
 #include <vector>
+#include <cmath>
 
 /*!
 *

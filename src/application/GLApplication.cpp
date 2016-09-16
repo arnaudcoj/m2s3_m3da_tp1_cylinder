@@ -6,6 +6,7 @@
 
 
 #include <iostream>
+#include <cmath>
 
 /*!
 *
@@ -318,8 +319,13 @@ void GLApplication::drawPathSpline() {
  * @return the transformation of the point p
  */
 
-Vector3 GLApplication::rotatePlane(const Vector3 &p,const Vector3 &n) {
-  Vector3 result;
+Vector3 GLApplication::rotatePlane(const Vector3 &p, const Vector3 &n) {
+  Vector3 result(p);
+
+  Quaternion quat;
+  quat.setRotation(Vector3(0,0,1), n);
+
+  quat.transform(&result) ;
 
   return result;
 }
@@ -365,9 +371,11 @@ void GLApplication::extrudeLine() {
 
   //Q6
   //On récupère le x et y de la slice et le z de la stack, puis on ajoute les Vector3(x,y,z) dans extrusion
-  for(Vector3 stack : _path) {
+  for(int stack_i = 0; stack_i < _path.size(); stack_i++) {
     for(Vector2 slice : _section) {
-      _extrusion.push_back(Vector3(slice.x(), slice.y(), stack.z()));
+      Vector3 normal =  _path[min(stack_i +1, int(_path.size() -1))] - _path[max(0, stack_i -1)];
+      Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
+      _extrusion.push_back(_path[stack_i] + transformed_slice);
     }
   }
 

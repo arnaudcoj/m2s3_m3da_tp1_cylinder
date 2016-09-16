@@ -8,6 +8,7 @@
 #include "Tools.h"
 
 #include <iostream>
+#include <cmath>
 
 /*!
 *
