@@ -230,9 +230,13 @@ void GLApplication::pathDefault() {
   //_path.push_back(Vector3(0,0,2));
 
   //Q7
-  _path.push_back(Vector3(-2,0,-2));
-  _path.push_back(Vector3(2,0,2));
+  //_path.push_back(Vector3(-2,0,-2));
+  //_path.push_back(Vector3(2,0,2));
 
+  //Q8
+   _path.push_back(Vector3(-2,0,-2));
+   _path.push_back(Vector3(0,0,2));
+   _path.push_back(Vector3(2,0,-1));
 }
 
 void GLApplication::pathCircle() {
@@ -349,7 +353,9 @@ Vector3 GLApplication::tangentPathSpline(double tNormalized) {
 
 Vector3 GLApplication::tangentPathLine(unsigned int i) {
   Vector3 result;
-
+  int a = max(0, int(i - 1));
+  int b = min(int(i + 1), int(_path.size() -1));
+  result = _path[b] - _path[a];
 
   return result;
 }
@@ -373,7 +379,7 @@ void GLApplication::extrudeLine() {
   //On récupère le x et y de la slice et le z de la stack, puis on ajoute les Vector3(x,y,z) dans extrusion
   for(int stack_i = 0; stack_i < _path.size(); stack_i++) {
     for(Vector2 slice : _section) {
-      Vector3 normal =  _path[min(stack_i +1, int(_path.size() -1))] - _path[max(0, stack_i -1)];
+      Vector3 normal = tangentPathLine(stack_i);
       Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
       _extrusion.push_back(_path[stack_i] + transformed_slice);
     }
