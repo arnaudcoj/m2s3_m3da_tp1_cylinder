@@ -339,6 +339,7 @@ Vector3 GLApplication::rotatePlane(const Vector3 &p, const Vector3 &n) {
 Vector3 GLApplication::pointSpline(double tNormalized) {
   Vector3 result;
 
+  //Q10
   double t = (_path.size() - 1) * tNormalized;
 
   unsigned int i = floor(t);
@@ -355,13 +356,29 @@ Vector3 GLApplication::pointSpline(double tNormalized) {
 
   result = pow(t,3) * (2 * p0 - 2 * p1 + t0 + t1) + pow(t,2) * (- 3 * p0 + 3 * p1 - 2 * t0 - t1) + t * t0 + p0;
 
-
   return result;
 }
 
 
 Vector3 GLApplication::tangentPathSpline(double tNormalized) {
   Vector3 result;
+
+  //Q11
+  double t = (_path.size() - 1) * tNormalized;
+
+  unsigned int i = floor(t);
+  t = t - i;
+
+  unsigned int a = i;
+  unsigned int b = i + 1;
+
+  Vector3 p0 = _path[a];
+  Vector3 p1 = _path[b];
+
+  Vector3 t0 = tangentPathLine(a);
+  Vector3 t1 = tangentPathLine(b);
+
+  result = 3 * pow(t,2) * (2 * p0 - 2 * p1 + t0 + t1) + 2 * t * (- 3 * p0 + 3 * p1 - 2 * t0 - t1) + t0;
 
   return result;
 }
@@ -410,6 +427,17 @@ void GLApplication::extrudeSpline() {
   _extrusion.clear();
   _normalExtrusion.clear(); // for lighting (last question)
 
+  //Q11
+  int nbPoints = 100;
+  for(int stack_i = 0; stack_i < nbPoints; stack_i++) {
+    for(Vector2 slice : _section) {
+      double tNormalized = double(stack_i) / double(nbPoints);
+      Vector3 stack = pointSpline(tNormalized);
+      Vector3 normal = tangentPathSpline(tNormalized);
+      Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
+      _extrusion.push_back(stack + transformed_slice);
+    }
+  }
 
 }
 
