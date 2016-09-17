@@ -339,6 +339,23 @@ Vector3 GLApplication::rotatePlane(const Vector3 &p, const Vector3 &n) {
 Vector3 GLApplication::pointSpline(double tNormalized) {
   Vector3 result;
 
+  double t = (_path.size() - 1) * tNormalized;
+
+  unsigned int i = floor(t);
+  t = t - i;
+
+  unsigned int a = i;
+  unsigned int b = i + 1;
+
+  Vector3 p0 = _path[a];
+  Vector3 p1 = _path[b];
+
+  Vector3 t0 = tangentPathLine(a);
+  Vector3 t1 = tangentPathLine(b);
+
+  result = pow(t,3) * (2 * p0 - 2 * p1 + t0 + t1) + pow(t,2) * (- 3 * p0 + 3 * p1 - 2 * t0 - t1) + t * t0 + p0;
+
+
   return result;
 }
 
