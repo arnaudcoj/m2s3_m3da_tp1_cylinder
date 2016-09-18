@@ -277,17 +277,17 @@ void GLApplication::drawExtrusion() {
   p3d::shaderVertexAmbient();
 
 
-  drawGrid(_extrusion,nbSlice); // comment this once last question done
+  //drawGrid(_extrusion,nbSlice); // comment this once last question done
 
   /*
    *  uncomment once normals computed (last question)
+  */
   p3d::lightPosition[0]=Vector4(0,0,10,1);
   p3d::lightIntensity[0]=1.0;
   p3d::material(Vector4(0,0,0.3,1),Vector3(0,0.2,0.8),Vector3(0,0.8,0.3),100);
   p3d::diffuseBackColor=Vector3(0.8,0,0);
   p3d::shaderLightPhong();
   fillGrid(_extrusion,_normalExtrusion,nbSlice);
-  */
 
 
 
