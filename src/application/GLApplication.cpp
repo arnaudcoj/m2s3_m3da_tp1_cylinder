@@ -428,6 +428,7 @@ void GLApplication::extrudeLine() {
       Vector3 normal = tangentPathLine(stack_i);
       Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
       _extrusion.push_back(_path[stack_i] + transformed_slice);
+      _normalExtrusion.push_back(_path[stack_i] + transformed_slice);
     }
   }
 
@@ -448,6 +449,8 @@ void GLApplication::extrudeSpline() {
       Vector3 normal = tangentPathSpline(tNormalized);
       Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
       _extrusion.push_back(stack + transformed_slice);
+      //Q14.2
+      _normalExtrusion.push_back(stack + transformed_slice);
     }
   }
 
