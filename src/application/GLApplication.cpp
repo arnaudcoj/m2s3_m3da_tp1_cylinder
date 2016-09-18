@@ -404,7 +404,13 @@ Vector3 GLApplication::tangentPathLine(unsigned int i) {
 
 void GLApplication::normalSection() {
   _normalSection.clear();
-
+  //q14.1
+  for(unsigned i = 0; i < _section.size(); i++) {
+    int a = max(0, int(i - 1));
+    int b = min(int(i + 1), int(_path.size() -1));
+    Vector2 normale = (_section[a] + _section[b]) / 2;
+    _normalSection.push_back(normale);
+  }
 
 }
 
