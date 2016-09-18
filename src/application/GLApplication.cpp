@@ -212,7 +212,7 @@ void GLApplication::sectionCircle() {
 
   // Q5
   int nbPoints = 30;
-  for(int i = 0; i <= nbPoints; i++) {
+  for(int i = -nbPoints; i <= nbPoints; i++) {
     float x = cos(2 * i * M_PI / nbPoints);
     float y = sin(2 * i * M_PI / nbPoints);
     _section.push_back(Vector2(x,y));
@@ -240,8 +240,14 @@ void GLApplication::pathDefault() {
 }
 
 void GLApplication::pathCircle() {
-
-
+  // Q12
+  _path.clear();
+  int nbPoints = 5;
+  for(int i = - nbPoints; i <= nbPoints; i++) {
+    float x = cos(double(i) * M_PI / double(nbPoints));
+    float z = sin(double(i) * M_PI / double(nbPoints));
+    _path.push_back(Vector3(x,0.,z));
+  }
 }
 
 /** ************************************************************************ **/
@@ -411,7 +417,7 @@ void GLApplication::extrudeLine() {
 
   //Q6
   //On récupère le x et y de la slice et le z de la stack, puis on ajoute les Vector3(x,y,z) dans extrusion
-  for(int stack_i = 0; stack_i < _path.size(); stack_i++) {
+  for(unsigned stack_i = 0; stack_i < _path.size(); stack_i++) {
     for(Vector2 slice : _section) {
       Vector3 normal = tangentPathLine(stack_i);
       Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
