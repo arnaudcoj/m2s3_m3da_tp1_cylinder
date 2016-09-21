@@ -451,7 +451,11 @@ void GLApplication::extrudeSpline() {
   //Q11
   int nbPoints = 100;
   for(int stack_i = 0; stack_i < nbPoints; stack_i++) {
+<<<<<<< HEAD
     for(int slice_i = _section.size() - 1; slice_i >= 0; slice_i--) {
+=======
+    for(int slice_i = _section.size(); slice_i >= 0; slice_i--) {
+>>>>>>> ebeba46b1b98cea1c2f0358e712440f1f337ccde
       double tNormalized = double(stack_i) / double(nbPoints);
       Vector3 stack = pointSpline(tNormalized);
       Vector3 normal = tangentPathSpline(tNormalized);
