@@ -424,9 +424,9 @@ void GLApplication::extrudeLine() {
   //Q6
   //On récupère le x et y de la slice et le z de la stack, puis on ajoute les Vector3(x,y,z) dans extrusion
   for(unsigned stack_i = 0; stack_i < _path.size(); stack_i++) {
-    for(Vector2 slice : _section) {
+    for(int slice_i = _section.size(); slice_i > 0; slice_i--) {
       Vector3 normal = tangentPathLine(stack_i);
-      Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
+      Vector3 transformed_slice = rotatePlane(Vector3(_section[slice_i], 0), normal);
       _extrusion.push_back(_path[stack_i] + transformed_slice);
       _normalExtrusion.push_back(_path[stack_i] + transformed_slice);
     }
@@ -443,11 +443,11 @@ void GLApplication::extrudeSpline() {
   //Q11
   int nbPoints = 100;
   for(int stack_i = 0; stack_i < nbPoints; stack_i++) {
-    for(Vector2 slice : _section) {
+    for(int slice_i = _section.size(); slice_i >= 0; slice_i--) {
       double tNormalized = double(stack_i) / double(nbPoints);
       Vector3 stack = pointSpline(tNormalized);
       Vector3 normal = tangentPathSpline(tNormalized);
-      Vector3 transformed_slice = rotatePlane(Vector3(slice, 0), normal);
+      Vector3 transformed_slice = rotatePlane(Vector3(_section[slice_i], 0), normal);
       _extrusion.push_back(stack + transformed_slice);
       //Q14.2
       _normalExtrusion.push_back(stack + transformed_slice);
