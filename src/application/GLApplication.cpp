@@ -408,10 +408,16 @@ void GLApplication::normalSection() {
   for(unsigned i = 0; i < _section.size(); i++) {
     int a = max(0, int(i - 1));
     int b = min(int(i + 1), int(_path.size() -1));
-    Vector2 normale = (_section[a] + _section[b]) / 2;
-    _normalSection.push_back(normale);
-  }
 
+    Vector2 dai(_section[i] - _section[a]);
+    Vector2 dib(_section[b] - _section[i]);
+
+    Vector2 ndai(-dai.y(), dai.x());
+    Vector2 ndib(-dib.y(), dib.x());
+    Vector2 normale = (ndai + ndib) / 2;
+    _normalSection.push_back(normale);
+    cout << "addeded" << endl;
+  }
 }
 
 
@@ -421,14 +427,16 @@ void GLApplication::extrudeLine() {
   _extrusion.clear();
   _normalExtrusion.clear(); // for lighting (last question)
 
+  normalSection();
   //Q6
   //On récupère le x et y de la slice et le z de la stack, puis on ajoute les Vector3(x,y,z) dans extrusion
   for(unsigned stack_i = 0; stack_i < _path.size(); stack_i++) {
-    for(int slice_i = _section.size(); slice_i > 0; slice_i--) {
+    for(int slice_i = _section.size() - 1; slice_i >= 0; slice_i--) {
       Vector3 normal = tangentPathLine(stack_i);
       Vector3 transformed_slice = rotatePlane(Vector3(_section[slice_i], 0), normal);
       _extrusion.push_back(_path[stack_i] + transformed_slice);
-      _normalExtrusion.push_back(_path[stack_i] + transformed_slice);
+      Vector3 transformed_normal = rotatePlane(Vector3(_normalSection[slice_i], 0), normal);
+      _normalExtrusion.push_back(-1 * (_path[stack_i] + Vector3(transformed_normal)));
     }
   }
 
@@ -443,7 +451,7 @@ void GLApplication::extrudeSpline() {
   //Q11
   int nbPoints = 100;
   for(int stack_i = 0; stack_i < nbPoints; stack_i++) {
-    for(int slice_i = _section.size(); slice_i >= 0; slice_i--) {
+    for(int slice_i = _section.size() - 1; slice_i >= 0; slice_i--) {
       double tNormalized = double(stack_i) / double(nbPoints);
       Vector3 stack = pointSpline(tNormalized);
       Vector3 normal = tangentPathSpline(tNormalized);
@@ -461,6 +469,7 @@ void GLApplication::extrudeSpline() {
 
 
 double GLApplication::scale(double tNormalized) {
+
   return 1.0;
 
 }
