@@ -211,12 +211,13 @@ void GLApplication::sectionCircle() {
   _section.clear();
 
   // Q5
-  int nbPoints = 30;
-  for(int i = -nbPoints; i <= nbPoints; i++) {
-    float x = cos(2 * i * M_PI / nbPoints);
-    float y = sin(2 * i * M_PI / nbPoints);
+  int nbPoints = 15;
+  for(int i = nbPoints; i > -nbPoints; i--) {
+    float x = cos(double(i) * M_PI / double(nbPoints));
+    float y = sin(double(i) * M_PI / double(nbPoints));
     _section.push_back(Vector2(x,y));
   }
+  _section.push_back(_section[0]);
 }
 
 
@@ -242,12 +243,13 @@ void GLApplication::pathDefault() {
 void GLApplication::pathCircle() {
   // Q12
   _path.clear();
-  int nbPoints = 5;
-  for(int i = - nbPoints; i <= nbPoints; i++) {
-    float x = cos(double(i) * M_PI / double(nbPoints));
-    float z = sin(double(i) * M_PI / double(nbPoints));
+  int nbPoints = 20;
+  for(int i = 0; i < nbPoints; i++) {
+    float x = cos(2. * double(i) * M_PI / double(nbPoints));
+    float z = sin(2. * double(i) * M_PI / double(nbPoints));
     _path.push_back(Vector3(x,0.,z));
   }
+  _path.push_back(_path[0]);
 }
 
 /** ************************************************************************ **/
@@ -372,12 +374,16 @@ Vector3 GLApplication::tangentPathSpline(double tNormalized) {
   //Q11
   double t = (_path.size() - 1) * tNormalized;
 
+  int a;
+  int b;
+
   unsigned int i = floor(t);
   t = t - i;
 
-  unsigned int a = i;
-  unsigned int b = i + 1;
-
+  if(_path[0] == _path[_path.size() - 1]) {
+    a = i;
+    b = i + 1;
+  }
   Vector3 p0 = _path[a];
   Vector3 p1 = _path[b];
 
@@ -393,8 +399,21 @@ Vector3 GLApplication::tangentPathSpline(double tNormalized) {
 
 Vector3 GLApplication::tangentPathLine(unsigned int i) {
   Vector3 result;
-  int a = max(0, int(i - 1));
-  int b = min(int(i + 1), int(_path.size() -1));
+
+  int a = i - 1;
+  int b = i + 1;
+
+  if(_path[0] == _path[_path.size() - 1]) {
+    if(a < 0) {
+      a = _path.size() - 2;
+    }
+    if(b >= _path.size()) {
+      b = 1;
+    }
+  } else {
+    a = max(0, a);
+    b = min(b, int(_path.size() -1));
+  }
   result = _path[b] - _path[a];
 
   return result;
@@ -416,7 +435,6 @@ void GLApplication::normalSection() {
     Vector2 ndib(-dib.y(), dib.x());
     Vector2 normale = (ndai + ndib) / 2;
     _normalSection.push_back(normale);
-    cout << "addeded" << endl;
   }
 }
 
@@ -451,11 +469,7 @@ void GLApplication::extrudeSpline() {
   //Q11
   int nbPoints = 100;
   for(int stack_i = 0; stack_i < nbPoints; stack_i++) {
-<<<<<<< HEAD
     for(int slice_i = _section.size() - 1; slice_i >= 0; slice_i--) {
-=======
-    for(int slice_i = _section.size(); slice_i >= 0; slice_i--) {
->>>>>>> ebeba46b1b98cea1c2f0358e712440f1f337ccde
       double tNormalized = double(stack_i) / double(nbPoints);
       Vector3 stack = pointSpline(tNormalized);
       Vector3 normal = tangentPathSpline(tNormalized);
