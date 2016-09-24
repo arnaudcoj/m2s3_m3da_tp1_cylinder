@@ -196,9 +196,9 @@ void GLApplication::drawSquare() {
 void GLApplication::sectionSquare() {
   _section.clear();
   _section.push_back(Vector2(-1,-1));
-  _section.push_back(Vector2(1,-1));
-  _section.push_back(Vector2(1,1));
   _section.push_back(Vector2(-1,1));
+  _section.push_back(Vector2(1,1));
+  _section.push_back(Vector2(1,-1));
   _section.push_back(Vector2(-1,-1));
 }
 
@@ -460,7 +460,8 @@ void GLApplication::normalSection() {
     Vector2 ndai(-dai.y(), dai.x());
     Vector2 ndib(-dib.y(), dib.x());
     Vector2 normale = (ndai + ndib) / 2;
-    normale.normalize();
+    if(normale.length() != 0.)
+      normale.normalize();
     _normalSection.push_back(normale);
   }
 }
@@ -478,9 +479,14 @@ void GLApplication::extrudeLine() {
   for(unsigned stack_i = 0; stack_i < _path.size(); stack_i++) {
     for(int slice_i = _section.size() - 1; slice_i >= 0; slice_i--) {
       Vector3 normal = tangentPathLine(stack_i);
+
       Vector3 transformed_slice = rotatePlane(Vector3(_section[slice_i], 0), normal);
+      double tNormalized = double(stack_i) / double(_path.size() - 1);
+      transformed_slice.scale(scale(tNormalized));
+
       _extrusion.push_back(_path[stack_i] + transformed_slice);
       Vector3 transformed_normal = rotatePlane(Vector3(_normalSection[slice_i], 0), normal);
+
       transformed_normal.normalize();
       _normalExtrusion.push_back(-1 * (Vector3(transformed_normal)));
     }
@@ -498,10 +504,11 @@ void GLApplication::extrudeSpline() {
   int nbPoints = 100;
   for(int stack_i = 0; stack_i < nbPoints; stack_i++) {
     for(int slice_i = _section.size() - 1; slice_i >= 0; slice_i--) {
-      double tNormalized = double(stack_i) / double(nbPoints);
+      double tNormalized = double(stack_i) / double(nbPoints - 1);
       Vector3 stack = pointSpline(tNormalized);
       Vector3 normal = tangentPathSpline(tNormalized);
       Vector3 transformed_slice = rotatePlane(Vector3(_section[slice_i], 0), normal);
+      transformed_slice.scale(scale(tNormalized));
       _extrusion.push_back(stack + transformed_slice);
       //Q14.2
       Vector3 transformed_normal = rotatePlane(Vector3(_normalSection[slice_i], 0), normal);
@@ -517,7 +524,13 @@ void GLApplication::extrudeSpline() {
 
 double GLApplication::scale(double tNormalized) {
 
-  return 1.0;
+  double a = 0.;
+  double b = 0.5;
+  double c = 1.;
+  double d = 0.;
+
+  double res = a * pow(tNormalized, 3) + b * pow(tNormalized, 2) + c * tNormalized + d;
+  return 1;
 
 }
 
