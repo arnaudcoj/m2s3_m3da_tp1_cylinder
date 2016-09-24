@@ -378,7 +378,7 @@ Vector3 GLApplication::tangentPathSpline(double tNormalized) {
   unsigned int i = floor(t);
   t = t - i;
 
-  int a = i - 1;
+  int a = i;
   int b = i + 1;
 
     if(_path[0] == _path[_path.size() - 1]) { // si on est dans une revolution
