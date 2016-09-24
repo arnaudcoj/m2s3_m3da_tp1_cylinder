@@ -110,6 +110,8 @@ Vector2 operator /(const Vector2 &b,double k);
 Vector2 operator *(const Vector2 &p1,const Vector2 &p2);
 /// Ex : p=p1/p2 => p.x()=p1.x()/p2.x(), ... (for each coordinate)
 Vector2 operator /(const Vector2 &p1,const Vector2 &p2);
+/// @brief Ex : p1==p2 !caution : dont use it ! (precision problem => may not do what you expect).
+bool operator==(const Vector2 &a,const Vector2 &b);
 }
 
 

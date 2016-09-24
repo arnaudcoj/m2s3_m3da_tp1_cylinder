@@ -25,6 +25,10 @@ Vector2 &Vector2::operator=(const Vector2 &u) {
   return *this;
 }
 
+bool p3d::operator==(const Vector2 &a,const Vector2 &b) {
+  return (a.x()==b.x() && a.y()==b.y());
+}
+
 Vector2::Vector2() {
 }
 
