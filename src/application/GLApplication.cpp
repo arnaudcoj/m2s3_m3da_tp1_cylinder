@@ -530,7 +530,7 @@ double GLApplication::scale(double tNormalized) {
   double d = 0.;
 
   double res = a * pow(tNormalized, 3) + b * pow(tNormalized, 2) + c * tNormalized + d;
-  return 1;
+  return res;
 
 }
 
