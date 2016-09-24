@@ -374,16 +374,28 @@ Vector3 GLApplication::tangentPathSpline(double tNormalized) {
   //Q11
   double t = (_path.size() - 1) * tNormalized;
 
-  int a;
-  int b;
 
   unsigned int i = floor(t);
   t = t - i;
 
-  if(_path[0] == _path[_path.size() - 1]) {
-    a = i;
-    b = i + 1;
-  }
+  int a = i - 1;
+  int b = i + 1;
+
+    if(_path[0] == _path[_path.size() - 1]) { // si on est dans une revolution
+      if (a < 0)
+        a = _path.size() - 2;
+      if (b >= _path.size())
+        b = 1;
+    } else {
+      if (a < 0) {
+        a = 0;
+        cout << "a inf 0 " << i << " " << a << " " << b << endl;
+      }
+      if (b >= _path.size()) {
+        b = _path.size() - 1;
+        cout << "b sup size " << i << " " << a << " " << b << endl;
+      }
+    }
   Vector3 p0 = _path[a];
   Vector3 p1 = _path[b];
 
